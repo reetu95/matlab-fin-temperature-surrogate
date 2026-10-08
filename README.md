@@ -21,6 +21,14 @@ toward the tip.
 Our goal is to predict temperature at different positions
 along fins of different lengths.
 
+![Single fin attached to a hot wall](fin_diagram.png)
+
+*Heat flows from the hot wall into the fin and escapes into
+the surrounding air. Our MATLAB models predict temperature
+from the base (x = 0) to the tip (x = L).*
+
+Source: [Original image source](FIN_SOURCE_URL)
+
 ## Step 1: Calculate Temperatures Using MATLAB
 
 We first used a heat-transfer equation in MATLAB to calculate
@@ -30,6 +38,7 @@ For each length, we calculated temperatures at 100 positions.
 This gave us a dataset containing 5,000 examples.
 
 Each example contains:
+
 - Position along the fin.
 - Fin length.
 - Normalized temperature ratio.
@@ -78,15 +87,17 @@ from the rules of heat transfer.
 
 During training, it receives a penalty when its predictions
 disagree with:
+
 - The equation describing heat transfer along the fin.
 - The known temperature at the base.
 - The heat-loss condition at the tip.
 
 Think of a student learning from solved examples.
-The PINN also learns the rules behind those answers.
+The PINN also receives guidance from the rules behind those answers.
 
 The penalties encourage the model to follow these rules,
-but they do not guarantee that every prediction is correct.
+but they do not guarantee that every prediction is correct
+or that the rules are satisfied exactly.
 
 ## Step 5: Compare the Baseline and PINN
 
@@ -100,6 +111,7 @@ We evaluated both models on the same unseen fin lengths.
 Smaller values mean better predictions.
 
 In this experiment, the PINN achieved:
+
 - 6.7% lower MAE.
 - 9.6% lower RMSE.
 
@@ -132,6 +144,16 @@ It then extended to 3D heat-sink temperature prediction
 using OpenFOAM CFD data and PyTorch, as described in our
 ASME FEDSM 2026 paper.
 
+![Example of a heat sink with multiple fins](heat-sink.png)
+
+*A heat sink uses many fins to remove heat. The single-fin
+study provides a simple starting point for understanding
+the more complex 3D heat-sink problem.*
+
+*This is an external illustration, not output from our models.*
+
+Source: [Original image source](HEAT_SINK_SOURCE_URL)
+
 This repository presents the MATLAB single-fin workflow.
 
 The MATLAB PINN was developed separately as an extension
@@ -141,17 +163,17 @@ of this work. It was not included in the published paper.
 
 Run these scripts in order:
 
-1. `generate_fin_data.m`
+1. `generate_fin_data.m`  
    Calculates temperature profiles and saves the dataset.
 
-2. `train_fin_surrogate.m`
+2. `train_fin_surrogate.m`  
    Trains the baseline neural network and saves its results.
 
-3. `train_fin_pinn.m`
+3. `train_fin_pinn.m`  
    Trains the PINN and compares it with the baseline.
 
 ## Tools Used
 
-- MATLAB for calculations, model training, evaluation, and plots.
+- MATLAB for calculations, data generation, training, evaluation, and plots.
 - Deep Learning Toolbox for neural networks and automatic differentiation.
 - Python/PyTorch in the related research workflow.
