@@ -1,5 +1,10 @@
 # Fin Temperature Prediction Using MATLAB and Neural Networks
 
+[**Launch Live Demo**](https://reetu-fin-temperature-demo.silver-okapi-5512.chatgpt.site)
+
+**Explore the predictions in your browser.
+No MATLAB installation, downloads, or login required.**
+
 How does temperature change along a metal fin?
 Can we teach a computer to predict it?
 
@@ -7,8 +12,9 @@ This project uses MATLAB to calculate temperatures, train a
 neural network, and explore whether adding physical rules
 improves its predictions.
 
-An interactive MATLAB app lets you change the fin length,
-see the predicted temperature, and compare the models.
+The interactive web demo lets you change the fin length,
+see predicted temperatures, and compare the models.
+The original MATLAB application is also available.
 
 ## What Is a Fin?
 
@@ -142,38 +148,67 @@ temperature data or physical rules.
 
 ![PINN training loss](pinn_training_loss.png)
 
-## Step 6: Explore the Results in an Interactive MATLAB App
+## Step 6: Explore the Interactive Demo
 
-We built a demo using MATLAB App Designer so that someone
-can explore the results without editing the training scripts.
+[**Launch Live Demo**](https://reetu-fin-temperature-demo.silver-okapi-5512.chatgpt.site)
 
-Move the slider to choose a fin length between 10 and 70 mm,
+Open the link and move the slider to choose a fin length
+between 10 and 70 mm.
+
+The coloured fin, temperature plots, and error values
+update immediately.
+
+No installation, downloads, or login are required.
+
+### How the Web Demo Works
+
+We exported predictions from the trained MATLAB models
+for 121 fin lengths, in 0.5 mm steps.
+
+The webpage displays those precomputed predictions
+when you move the slider.
+
+The models were trained and evaluated in MATLAB.
+No model training or neural-network inference runs
+in your browser.
+
+### Original MATLAB Application
+
+We also built an application using MATLAB App Designer.
+
+In that application, move the slider to choose a fin length,
 then click **Predict Temperature**.
 
-The app uses the saved neural networks to make predictions.
-It does not retrain them each time you click the button.
+The MATLAB app runs the saved neural networks to make
+predictions. It does not retrain them each time you click.
 
 ![Interactive MATLAB demo](app_demo.png)
 
-### What Does the Demo Show?
+*This screenshot shows the MATLAB application.
+The live web demo presents the same types of results
+in a browser-friendly layout.*
+
+### What Do the Demos Show?
 
 **The coloured fin**
 
-The top illustration shows the PINN’s predicted temperature
+The illustration shows the PINN’s predicted temperature
 along the fin.
 
 Red represents temperatures closer to the hot base.
 Blue represents temperatures closer to the surroundings.
 Intermediate colours show temperatures between these values.
 
-The strip is an illustration of the 1D prediction.
-It is not a 2D or 3D simulation.
+The strip illustrates the prediction along a 1D fin.
+It does not represent temperature variation across
+the fin’s width or thickness.
 
 **The temperature comparison**
 
-The middle plot compares three curves:
+The temperature plot compares three curves:
 
-- Black: the analytical answer from the heat-transfer equation.
+- A dark solid line: the analytical answer from the
+  heat-transfer equation.
 - Blue: the baseline neural network’s prediction.
 - Red: the PINN’s prediction.
 
@@ -181,11 +216,15 @@ When the curves are close together, the models are predicting
 values close to the analytical answer.
 
 The displayed RMSE values measure each model’s error
-for the selected fin length.
+across the 100 positions for the selected fin length.
+
+A model with lower RMSE predicts more accurately overall
+at that length. The other model may still be more accurate
+at some individual positions.
 
 **The prediction-error plot**
 
-The bottom plot makes small differences easier to see.
+The error plot makes small differences easier to see.
 
 It shows each prediction minus the analytical answer:
 
@@ -196,7 +235,10 @@ It shows each prediction minus the analytical answer:
 A curve closer to zero has a smaller error at that position.
 
 The demo’s errors apply to the selected fin length.
-The results in Step 5 summarize the full held-out test set.
+The slider includes training lengths and other lengths.
+
+The results in Step 5 summarize the original held-out
+test set, which contains lengths excluded from training.
 
 ## Connection to Our Research
 
@@ -221,15 +263,22 @@ Source: [Original image source](HEAT_SINK_SOURCE_URL)
 
 This repository presents the MATLAB single-fin workflow.
 
-The MATLAB PINN and interactive demo were developed
+The MATLAB PINN and interactive demos were developed
 separately as extensions of this work.
 They were not included in the paper.
 
-## Run the Project in MATLAB
+## Run the Project
+
+### Open the Web Demo
+
+[**Launch Live Demo**](https://reetu-fin-temperature-demo.silver-okapi-5512.chatgpt.site)
+
+Move the slider to explore the results.
+MATLAB is not required to use the web demo.
+
+### Generate Data and Train the Models in MATLAB
 
 MATLAB and Deep Learning Toolbox are required.
-
-### Generate Data and Train the Models
 
 Run these scripts in order:
 
@@ -242,18 +291,21 @@ Run these scripts in order:
 3. `train_fin_pinn.m`  
    Trains the PINN and compares it with the baseline.
 
-### Run the Interactive Demo
+### Run the MATLAB Application
 
 To use the existing trained models:
 
 1. Download the repository and open its folder in MATLAB.
-2. Keep these files in the MATLAB current folder:
-   - `fin_temperature_demo.mlapp`
-   - `fin_surrogate_model.mat`
-   - `fin_pinn_model.mat`
+2. Keep the following three files in the MATLAB current folder.
 3. Open `fin_temperature_demo.mlapp` in App Designer.
 4. Click **Run**.
 5. Choose a fin length and click **Predict Temperature**.
+
+Required files:
+
+- `fin_temperature_demo.mlapp`
+- `fin_surrogate_model.mat`
+- `fin_pinn_model.mat`
 
 No retraining is needed when using the saved models.
 
@@ -263,5 +315,7 @@ No retraining is needed when using the saved models.
   evaluation, and plots.
 - Deep Learning Toolbox for neural networks and
   automatic differentiation.
-- MATLAB App Designer for the interactive demo.
+- MATLAB App Designer for the MATLAB application.
+- HTML, CSS, and JavaScript for the public web demo.
+- JSON for exporting MATLAB predictions to the web demo.
 - Python/PyTorch in the related research workflow.
