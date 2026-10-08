@@ -7,6 +7,9 @@ This project uses MATLAB to calculate temperatures, train a
 neural network, and explore whether adding physical rules
 improves its predictions.
 
+An interactive MATLAB app lets you change the fin length,
+see the predicted temperature, and compare the models.
+
 ## What Is a Fin?
 
 A fin is a metal piece that helps remove heat from a hot object.
@@ -32,7 +35,7 @@ Source: [Original image source](FIN_SOURCE_URL)
 ## Step 1: Calculate Temperatures Using MATLAB
 
 We first used a heat-transfer equation in MATLAB to calculate
-temperature profiles for 50 fin lengths.
+temperature profiles for 50 fin lengths, ranging from 10 to 70 mm.
 
 For each length, we calculated temperatures at 100 positions.
 This gave us a dataset containing 5,000 examples.
@@ -45,7 +48,9 @@ Each example contains:
 
 The temperature ratio describes how much warmer a position
 is than the surroundings, relative to the fin’s base.
+
 A value of 1 represents the base temperature.
+A value of 0 represents the surrounding temperature.
 
 These calculated values became our answer sheet for
 training and checking the models.
@@ -59,6 +64,10 @@ Next, we trained a neural network in MATLAB.
 A neural network learns patterns from examples.
 We gave it the position and fin length and taught it to
 predict the temperature ratio.
+
+During training, the network compared its predictions
+with the calculated answers and adjusted its internal
+weights to reduce its mistakes.
 
 This model learns from temperature data alone.
 We call it our baseline because it is the starting model
@@ -92,10 +101,10 @@ disagree with:
 - The known temperature at the base.
 - The heat-loss condition at the tip.
 
-Think of a student learning from solved examples.
-The PINN also receives guidance from the rules behind those answers.
+The network adjusts its weights to reduce both its
+prediction mistakes and its disagreement with these rules.
 
-The penalties encourage the model to follow these rules,
+The penalties encourage the model to follow the physics,
 but they do not guarantee that every prediction is correct
 or that the rules are satisfied exactly.
 
@@ -133,6 +142,62 @@ temperature data or physical rules.
 
 ![PINN training loss](pinn_training_loss.png)
 
+## Step 6: Explore the Results in an Interactive MATLAB App
+
+We built a demo using MATLAB App Designer so that someone
+can explore the results without editing the training scripts.
+
+Move the slider to choose a fin length between 10 and 70 mm,
+then click **Predict Temperature**.
+
+The app uses the saved neural networks to make predictions.
+It does not retrain them each time you click the button.
+
+![Interactive MATLAB demo](app_demo.png)
+
+### What Does the Demo Show?
+
+**The coloured fin**
+
+The top illustration shows the PINN’s predicted temperature
+along the fin.
+
+Red represents temperatures closer to the hot base.
+Blue represents temperatures closer to the surroundings.
+Intermediate colours show temperatures between these values.
+
+The strip is an illustration of the 1D prediction.
+It is not a 2D or 3D simulation.
+
+**The temperature comparison**
+
+The middle plot compares three curves:
+
+- Black: the analytical answer from the heat-transfer equation.
+- Blue: the baseline neural network’s prediction.
+- Red: the PINN’s prediction.
+
+When the curves are close together, the models are predicting
+values close to the analytical answer.
+
+The displayed RMSE values measure each model’s error
+for the selected fin length.
+
+**The prediction-error plot**
+
+The bottom plot makes small differences easier to see.
+
+It shows each prediction minus the analytical answer:
+
+- Zero means the prediction matches the analytical answer.
+- Above zero means the model predicts too high.
+- Below zero means the model predicts too low.
+
+A curve closer to zero has a smaller error at that position.
+
+The demo’s errors apply to the selected fin length.
+The results in Step 5 summarize the full held-out test set.
+
 ## Connection to Our Research
 
 During our heat-transfer research, we used both MATLAB
@@ -156,10 +221,15 @@ Source: [Original image source](HEAT_SINK_SOURCE_URL)
 
 This repository presents the MATLAB single-fin workflow.
 
-The MATLAB PINN was developed separately as an extension
-of this work. It was not included in the published paper.
+The MATLAB PINN and interactive demo were developed
+separately as extensions of this work.
+They were not included in the paper.
 
 ## Run the Project in MATLAB
+
+MATLAB and Deep Learning Toolbox are required.
+
+### Generate Data and Train the Models
 
 Run these scripts in order:
 
@@ -172,8 +242,26 @@ Run these scripts in order:
 3. `train_fin_pinn.m`  
    Trains the PINN and compares it with the baseline.
 
+### Run the Interactive Demo
+
+To use the existing trained models:
+
+1. Download the repository and open its folder in MATLAB.
+2. Keep these files in the MATLAB current folder:
+   - `fin_temperature_demo.mlapp`
+   - `fin_surrogate_model.mat`
+   - `fin_pinn_model.mat`
+3. Open `fin_temperature_demo.mlapp` in App Designer.
+4. Click **Run**.
+5. Choose a fin length and click **Predict Temperature**.
+
+No retraining is needed when using the saved models.
+
 ## Tools Used
 
-- MATLAB for calculations, data generation, training, evaluation, and plots.
-- Deep Learning Toolbox for neural networks and automatic differentiation.
+- MATLAB for calculations, data generation, training,
+  evaluation, and plots.
+- Deep Learning Toolbox for neural networks and
+  automatic differentiation.
+- MATLAB App Designer for the interactive demo.
 - Python/PyTorch in the related research workflow.
