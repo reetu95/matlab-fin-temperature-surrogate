@@ -1,26 +1,42 @@
-## Research Background
+## Separate PINN Extension
 
-During our heat-transfer research, we used both MATLAB and
-Python/PyTorch to develop and evaluate neural-network surrogates
-for temperature prediction.
+Separately from the published research, we extended this MATLAB
+project with a physics-informed neural network (PINN).
+This extension was not included in the ASME FEDSM 2026 paper.
 
-The work began with an analytical single-fin study: generating
-temperature profiles from a heat-transfer equation and training
-neural networks to predict normalized temperature from position
-and fin length.
+The baseline neural network learns from temperature data alone.
+The PINN also includes penalties for violating the governing
+fin heat-transfer equation and the base and tip boundary conditions.
 
-The research then extended to 3D heat-sink temperature prediction
-using OpenFOAM CFD data and PyTorch, as described in our
-ASME FEDSM 2026 paper.
+Both models were evaluated on the same held-out fin lengths.
 
-This repository presents the MATLAB implementation of the
-analytical fin study, including data generation, neural-network
-training, validation, and visualization.
+### Test Results
 
-## Analytical Temperature Profiles
+| Metric | Data-only neural network baseline | PINN |
+|---|---:|---:|
+| MAE | 0.009140 | 0.008527 |
+| RMSE | 0.011525 | 0.010419 |
 
-![Analytical temperature profiles](theory_curves.png)
+In this experiment, the PINN reduced test MAE by 6.7% and
+test RMSE by 9.6%. These errors measure the normalized
+temperature ratio, not temperature in degrees.
 
-## Neural Network Predictions vs Theory
+Boundary conditions are imposed through loss penalties,
+so they are not guaranteed to be satisfied exactly.
 
-![Predictions vs theory](predictions_vs_theory.png)
+### PINN Predictions vs Baseline and Theory
+
+![PINN comparison](pinn_vs_baseline.png)
+
+### PINN Training Loss
+
+![PINN training loss](pinn_training_loss.png)
+
+### Running the PINN Extension
+
+1. Run `generate_fin_data.m` to generate the analytical dataset.
+2. Run `train_fin_surrogate.m` to train and save the baseline.
+3. Run `train_fin_pinn.m` to train the PINN and compare results.
+
+The PINN script saves `fin_pinn_model.mat`,
+`pinn_training_loss.png`, and `pinn_vs_baseline.png`.
