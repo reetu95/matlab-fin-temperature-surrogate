@@ -16,3 +16,11 @@ ASME FEDSM 2026 paper.
 This repository presents the MATLAB implementation of the
 analytical fin study, including data generation, neural-network
 training, validation, and visualization.
+
+## Analytical Temperature Profiles
+
+![Analytical temperature profiles](theory_curves.png)
+
+## Neural Network Predictions vs Theory
+
+![Predictions vs theory](predictions_vs_theory.png)
